@@ -7,9 +7,6 @@ $.get(chrome.extension.getURL('/settings.json'), function(json) {
 });
 
 
-// linear-gradient(top right, rgba(0,255,0,0.1) 10%, rgba(255,0,0,0.1) 20%, rgba(0,0,255,0.1) 100%);
-// $('.mbm').css({'background': 'linear-gradient(-90deg, rgba(255,255,255,0.3) 10%, yellow 10%,blue 20%,green 50%)'});
-
 function init(){
   var contents = $('.mbm').each(function(){
     getContent(this);
@@ -38,8 +35,7 @@ function getContent(block) {
     // var text = 'test';
   processText(text, function(data) {
     console.log(text, data);
-    // anger: "0.23232", disgust: "0.028577", fear: "0.152354", joy: "0.640736", sadness: "0.053535"
-    // $(block).css({'background': 'linear-gradient(-90deg, rgba(255,255,255,0.3) 10%, yellow 10%, blue 20%, green 50%)'});
+    applyRank(block, data);
   });
 }
 
@@ -52,5 +48,30 @@ function processText(text, callback) {
     if(typeof data.docEmotions == 'undefined') return;
     callback(data.docEmotions);
   });
+}
+
+
+function applyRank(block, data) {
+
+  var summ = 0;
+  for (var key in data) {
+    summ += parseFloat(data[key])
+  }
+
+  if(summ <= 0) return console.warn('summ <= 0');
+
+  var obj = {};
+
+  // data example: {anger: "0.23232", disgust: "0.028577", fear: "0.152354", joy: "0.640736", sadness: "0.053535"}
+  var colors = ['red', 'violet', 'green', 'yellow', 'blue'];
+  var index = 0;
+  for (var key in data) {
+    obj[colors[index]] = parseInt(parseFloat(data[key])/summ * 100);
+    index++;
+  }
+  console.log('obj', obj);
+
+  $(block).css({'background': 'linear-gradient(90deg, rgba(255,0,0,0.1) '+obj.red+'%, rgba(255,255,0,0.1) '+obj.yellow+'%, rgba(0,255,0,0.1) '+obj.green+'%, rgba(0,255,255,0.1) '+obj.violet+'%, rgba(0,0,255,0.1) '+obj.blue+'%)'});
+
 }
 
