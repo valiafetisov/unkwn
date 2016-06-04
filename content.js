@@ -1,12 +1,18 @@
+
+//
+// Get settings
+//
 var settings = {}
-
-
 $.get(chrome.extension.getURL('/settings.json'), function(json) {
   settings = JSON.parse(json);
   init();
 });
 
 
+//
+// initialise by parsing existing content
+// and starting DOM observer
+//
 function init(){
   var contents = $('.mbm').each(function(){
     getContent(this);
@@ -23,23 +29,27 @@ function init(){
   observer.observe(document, {
     subtree: true,
     childList: true
-    // attributes: true
   });
 }
 
 
+//
+// Get block content by element
+//
 function getContent(block) {
   var text = $(block).find('.userContentWrapper .userContent').text();
   if(text.length == 0)
     return console.warn('text is empty');
-    // var text = 'test';
   processText(text, function(data) {
-    console.log(text, data);
+    // console.log(text, data);
     applyRank(block, data);
   });
 }
 
 
+//
+// send text to watson and fire a callback on success
+//
 function processText(text, callback) {
   if(typeof settings == 'undefined' || typeof settings.watson === 'undefined') return console.warn('no settings provided');
   var encoded = encodeURI(text);
@@ -51,29 +61,36 @@ function processText(text, callback) {
 }
 
 
+//
+// apply recieved data
+//
 function applyRank(block, data) {
 
-  var summ = 0;
-  for (var key in data) {
-    summ += parseFloat(data[key])
-  }
+  var summ = Object.keys(data).reduce(function (previous, key) {
+    return previous + parseFloat(data[key]);
+  }, 0);
 
   if(summ <= 0) return console.warn('summ <= 0');
 
-  var obj = {};
+  var correspondence = {
+    anger: 'red',
+    disgust: 'violet',
+    fear: 'green',
+    joy: 'yellow',
+    sadness: 'blue'
+  };
 
-  // data example: {anger: "0.23232", disgust: "0.028577", fear: "0.152354", joy: "0.640736", sadness: "0.053535"}
-  var colors = ['red', 'yellow', 'green', 'violet', 'blue'];
+  var obj = {};
   var index = 0;
-  var j=0;
+  var padding = 0;
   for (var key in data) {
-    obj[colors[index]] = j;
-    j += parseInt(parseFloat(data[key])/summ * 100);
+    obj[correspondence[key]] = padding;
+    padding += parseInt(parseFloat(data[key])/summ * 100);
     index++;
   }
-  console.log('obj', obj);
+  console.log('obj', data, obj, summ);
 
-  $(block).css({'background': 'linear-gradient(to right, rgba(255,0,0,0.3) '+obj.red+'%, rgba(255,255,0,0.3) '+obj.yellow+'%, rgba(0,255,0,0.3) '+obj.green+'%, rgba(0,255,255,0.3) '+obj.violet+'%, rgba(0,0,255,0.3) '+obj.blue+'%)'});
+  $(block).css({'background': 'linear-gradient(to right, rgba(255,0,0,0.3) '+obj.red+'%, rgba(255,255,0,0.3) '+obj.violet+'%, rgba(0,255,0,0.3) '+obj.green+'%, rgba(255,0,255,0.3) '+obj.yellow+'%, rgba(0,0,255,0.3) '+obj.blue+'%)'});
 
 }
 
