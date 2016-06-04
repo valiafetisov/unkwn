@@ -71,7 +71,7 @@ function applyRank(block, data) {
   }
   console.log('obj', obj);
 
-  $(block).css({'background': 'linear-gradient(90deg, rgba(255,0,0,0.1) '+obj.red+'%, rgba(255,255,0,0.1) '+obj.yellow+'%, rgba(0,255,0,0.1) '+obj.green+'%, rgba(0,255,255,0.1) '+obj.violet+'%, rgba(0,0,255,0.1) '+obj.blue+'%)'});
+  $(block).css({'background': 'linear-gradient(90deg, rgba(255,0,0,0.3) '+obj.red+'%, rgba(255,255,0,0.3) '+obj.yellow+'%, rgba(0,255,0,0.3) '+obj.green+'%, rgba(0,255,255,0.3) '+obj.violet+'%, rgba(0,0,255,0.3) '+obj.blue+'%)'});
 
 }
 
