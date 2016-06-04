@@ -63,7 +63,7 @@ function applyRank(block, data) {
   var obj = {};
 
   // data example: {anger: "0.23232", disgust: "0.028577", fear: "0.152354", joy: "0.640736", sadness: "0.053535"}
-  var colors = ['red', 'violet', 'green', 'yellow', 'blue'];
+  var colors = ['red', 'yellow', 'green', 'violet', 'blue'];
   var index = 0;
   var j=0;
   for (var key in data) {
@@ -73,7 +73,7 @@ function applyRank(block, data) {
   }
   console.log('obj', obj);
 
-  $(block).css({'background': 'linear-gradient(90deg, rgba(255,0,0,0.3) '+obj.red+'%, rgba(255,255,0,0.3) '+obj.yellow+'%, rgba(0,255,0,0.3) '+obj.green+'%, rgba(0,255,255,0.3) '+obj.violet+'%, rgba(0,0,255,0.3) '+obj.blue+'%)'});
+  $(block).css({'background': 'linear-gradient(to right, rgba(255,0,0,0.3) '+obj.red+'%, rgba(255,255,0,0.3) '+obj.yellow+'%, rgba(0,255,0,0.3) '+obj.green+'%, rgba(0,255,255,0.3) '+obj.violet+'%, rgba(0,0,255,0.3) '+obj.blue+'%)'});
 
 }
 
