@@ -9,5 +9,8 @@
       ],
       "js": ["lib/jquery-2.2.4.min.js", "content.js"]
     }
+  ],
+  "web_accessible_resources": [
+    "settings.json"
   ]
 }
