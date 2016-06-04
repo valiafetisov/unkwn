@@ -65,8 +65,10 @@ function applyRank(block, data) {
   // data example: {anger: "0.23232", disgust: "0.028577", fear: "0.152354", joy: "0.640736", sadness: "0.053535"}
   var colors = ['red', 'violet', 'green', 'yellow', 'blue'];
   var index = 0;
+  var j=0;
   for (var key in data) {
-    obj[colors[index]] = parseInt(parseFloat(data[key])/summ * 100);
+    obj[colors[index]] = j;
+    j += parseInt(parseFloat(data[key])/summ * 100);
     index++;
   }
   console.log('obj', obj);
