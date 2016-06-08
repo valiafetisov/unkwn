@@ -55,7 +55,7 @@ function processText(text, callback) {
   var encoded = encodeURI(text);
   $.get(settings.watson.gateway+'?apikey='+settings.watson.apikey+'&text='+encoded+'&outputMode=json', function(data){
     if(typeof data === 'undefined' || !data) return console.warn('no responce from watson');
-    if(typeof data.docEmotions == 'undefined') return;
+    if(typeof data.docEmotions == 'undefined') return console.warn('data.docEmotions empty', data);
     callback(data.docEmotions);
   });
 }
@@ -66,11 +66,11 @@ function processText(text, callback) {
 //
 function applyRank(block, data) {
 
-  var summ = Object.keys(data).reduce(function (previous, key) {
-    return previous + parseFloat(data[key]);
-  }, 0);
+  // var summ = Object.keys(data).reduce(function (previous, key) {
+  //   return previous + parseFloat(data[key]);
+  // }, 0);
 
-  if(summ <= 0) return console.warn('summ <= 0');
+  // if(summ <= 0) return console.warn('summ <= 0');
 
   var correspondence = {
     anger: 'red',
@@ -81,16 +81,22 @@ function applyRank(block, data) {
   };
 
   var obj = {};
-  var index = 0;
-  var padding = 0;
   for (var key in data) {
-    obj[correspondence[key]] = padding;
-    padding += parseInt(parseFloat(data[key])/summ * 100);
-    index++;
+    obj[correspondence[key]] = parseInt(parseFloat(data[key])/5 * 100);
   }
-  console.log('obj', data, obj, summ);
+  console.log('obj', data, obj);
+  var title = JSON.stringify(data);
 
-  $(block).css({'background': 'linear-gradient(to right, rgba(255,0,0,0.3) '+obj.red+'%, rgba(255,255,0,0.3) '+obj.violet+'%, rgba(0,255,0,0.3) '+obj.green+'%, rgba(255,0,255,0.3) '+obj.yellow+'%, rgba(0,0,255,0.3) '+obj.blue+'%)'});
+  // $(block).css({'background': 'linear-gradient(to right, rgba(255,0,0,0.3) '+obj.red+'%, rgba(255,255,0,0.3) '+obj.violet+'%, rgba(0,255,0,0.3) '+obj.green+'%, rgba(255,0,255,0.3) '+obj.yellow+'%, rgba(0,0,255,0.3) '+obj.blue+'%, rgba(255,255,255,0.3) 100%)'});
+  $(block)
+    // .prepend('<div class="prepended" style="width: 100%; height: 3px; background: black; postition: absolute; bottom: -1px;"></div>')
+    // $(block).find('.prepended')
+    .prepend('<div style="width: '+obj.red+'%; height: 3px; background: red; float: left;"></div>')
+    .prepend('<div style="width: '+obj.violet+'%; height: 3px; background: violet; float: left;"></div>')
+    .prepend('<div style="width: '+obj.green+'%; height: 3px; background: green; float: left;"></div>')
+    .prepend('<div style="width: '+obj.yellow+'%; height: 3px; background: yellow; float: left;"></div>')
+    .prepend('<div style="width: '+obj.blue+'%; height: 3px; background: blue; float: left;"></div>')
+    .attr('title', title);
 
 }
 
