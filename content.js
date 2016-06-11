@@ -66,12 +66,11 @@ function processText(text, callback) {
 //
 function applyRank(block, data) {
 
-  // var summ = Object.keys(data).reduce(function (previous, key) {
-  //   return previous + parseFloat(data[key]);
-  // }, 0);
-
-  // if(summ <= 0) return console.warn('summ <= 0');
-
+  // var dataSorted = Object.keys(data).sort(function(a,b){
+  //   console.log('')
+  //   return data[a]-data[b]
+  // })
+  // console.log('dataSorted', dataSorted)
   var correspondence = {
     anger: 'red',
     disgust: 'violet',
@@ -81,22 +80,27 @@ function applyRank(block, data) {
   };
 
   var obj = {};
+  var colors = {};
+  var titleArray = [];
   for (var key in data) {
-    obj[correspondence[key]] = parseInt(parseFloat(data[key])/5 * 100);
+    var percentage = parseInt(parseFloat(data[key])/5 * 100);
+    obj[correspondence[key]] = percentage;
+    titleArray.push('<span style="color:'+correspondence[key]+'">' + key + ': ' + percentage + '%</span>');
   }
-  console.log('obj', data, obj);
-  var title = JSON.stringify(data);
+  var title = titleArray.join(', ');
+  console.log('obj', data, obj, title);
 
-  // $(block).css({'background': 'linear-gradient(to right, rgba(255,0,0,0.3) '+obj.red+'%, rgba(255,255,0,0.3) '+obj.violet+'%, rgba(0,255,0,0.3) '+obj.green+'%, rgba(255,0,255,0.3) '+obj.yellow+'%, rgba(0,0,255,0.3) '+obj.blue+'%, rgba(255,255,255,0.3) 100%)'});
   $(block)
-    // .prepend('<div class="prepended" style="width: 100%; height: 3px; background: black; postition: absolute; bottom: -1px;"></div>')
-    // $(block).find('.prepended')
     .prepend('<div style="width: '+obj.red+'%; height: 3px; background: red; float: left;"></div>')
     .prepend('<div style="width: '+obj.violet+'%; height: 3px; background: violet; float: left;"></div>')
     .prepend('<div style="width: '+obj.green+'%; height: 3px; background: green; float: left;"></div>')
     .prepend('<div style="width: '+obj.yellow+'%; height: 3px; background: yellow; float: left;"></div>')
     .prepend('<div style="width: '+obj.blue+'%; height: 3px; background: blue; float: left;"></div>')
-    .attr('title', title);
+    .tooltipster({
+      content: $(title),
+      theme: 'tooltipster-light',
+      position: 'top'
+    });
 
 }
 
