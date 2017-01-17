@@ -1,6 +1,6 @@
 {
   "watson": {
-    "gateway": "https_link_to_the_alchemy_api",
+    "gateway": "https://gateway-a.watsonplatform.net/calls/text/TextGetEmotion",
     "apikey": "your_api_key"
   }
 }
