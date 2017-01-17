@@ -5,6 +5,11 @@ Google Chrome browser extension to augment Facebook feed with semantic informati
 This idea was developed during the workshop "NII Message" which was a part of "Future of the word" coference in June 2016. Authors of the original idea are: Samer Fatayri, Andrew Pantyukhin, Ivan Sorokin, Oleg Yusupov, Mikhail and Valia Fetisov.
 
 
+## Preview
+
+![screenshot](https://raw.githubusercontent.com/valiafetisov/unkwn/master/preview.png)
+
+
 ## Quick start
 
 To use this browser extension in development mode you have to:
